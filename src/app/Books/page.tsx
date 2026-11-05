@@ -3,14 +3,23 @@ import Image from "next/image";
 import BookCard from "@/app/components/shared/BookCard";
 import { IBook } from "@/types/books.type";
 const getBooks = async () => {
-    const response = await fetch("http://localhost:3000/booksData.json");
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/booksData.json`
+    );
 
     if (!response.ok) {
-        throw new Error("Failed to fetch books");
+      throw new Error(`Server error: ${response.status}`);
     }
 
-    return response.json();
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log("Error fetch books data", error);
+    return [];
+  }
 };
+
 
 const Books = async () => {
     const booksData = await getBooks();
