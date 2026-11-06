@@ -1,28 +1,10 @@
 
-import Image from "next/image";
 import BookCard from "@/app/components/shared/BookCard";
 import { IBook } from "@/types/books.type";
-import { error } from "next/dist/build/output/log";
- const getBooks = async () => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/booksData.json`
-    );
+import booksDataJson from "@/booksData.json";
 
-    if (!response.ok) {
-      throw new Error(`Server error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log("Error fetch books data", error);
-    return [];
-  }
-};
-
-const Books = async () => {
-    const booksData = await getBooks();
+const Books = () => {
+    const booksData = booksDataJson as IBook[];
 
     return (
         <section className="container mx-auto px-4 py-10">
@@ -39,12 +21,11 @@ const Books = async () => {
             </div>
 
             {/* Books Grid */}
-            <div className="grid gap-6 sm:grid-cols-2 lg:cols-3">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 
-                {booksData.slice(0, 9).map((book: IBook, ind: number) => {
+                {booksData.slice(0, 6).map((book: IBook, ind: number) => {
     return <BookCard key={ind} book={book} />;
 })}
-
             </div>
         </section>
     );
